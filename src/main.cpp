@@ -33,7 +33,7 @@ int main() {
   uWS::Hub h;
 
   // Create a Kalman Filter instance
-  FusionEKF fusionEKF;
+  Fusion fusionEKF;
 
   // used to compute the RMSE later
   Tools tools;
@@ -108,17 +108,17 @@ int main() {
           ground_truth.push_back(gt_values);
           
           // Call ProcessMeasurement(meas_package) for Kalman filter
-          fusionEKF.ProcessMeasurement(meas_package);       
+          fusionEKF.processMeasurement(meas_package);       
 
           // Push the current estimated x,y positon from the Kalman filter's 
           //   state vector
 
           VectorXd estimate(4);
 
-          double p_x = fusionEKF.ekf_.x_(0);
-          double p_y = fusionEKF.ekf_.x_(1);
-          double v1  = fusionEKF.ekf_.x_(2);
-          double v2 = fusionEKF.ekf_.x_(3);
+          double p_x = (fusionEKF.ekf->getState())(0);
+          double p_y = (fusionEKF.ekf->getState())(1);
+          double v1  = (fusionEKF.ekf->getState())(2);
+          double v2 = (fusionEKF.ekf->getState())(3);
 
           estimate(0) = p_x;
           estimate(1) = p_y;

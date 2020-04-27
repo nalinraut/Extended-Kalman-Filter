@@ -44,14 +44,14 @@ void ExtendedKalmanFilter::setProcessNoiseMatrix(const Eigen::MatrixXd processNo
     mQ = processNoiseMatrix;
 }
 
-Eigen::MatrixXd ExtendedKalmanFilter::getProcessNoiseMatrix() const
+Eigen::MatrixXd ExtendedKalmanFilter::getMeasurementNoiseMatrix() const
 {
-    return mQ;
+    return mR;
 }
 
-void ExtendedKalmanFilter::setProcessNoiseMatrix(const Eigen::MatrixXd processNoiseMatrix)
+void ExtendedKalmanFilter::setMeasurementNoiseMatrix(const Eigen::MatrixXd measurementNoiseMatrix)
 {
-    mQ = processNoiseMatrix;
+    mR = measurementNoiseMatrix;
 }
 
 void ExtendedKalmanFilter::predict() {
@@ -63,8 +63,8 @@ void ExtendedKalmanFilter::predict() {
      * P = F P F' + Q  
     */
 
-	BayesianFilter::mX = mF * mX;
-	BayesianFilter::mP = mF * mP * mF.transpose() + mQ;
+	mX = mF * mX;
+	mP = mF * mP * mF.transpose() + mQ;
 }
 
 void ExtendedKalmanFilter::update(const Eigen::VectorXd &z,

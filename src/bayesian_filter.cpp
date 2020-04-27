@@ -30,10 +30,10 @@ void BayesianFilter::setProcessCovariance(const Eigen::MatrixXd processCov)
     mP = processCov;
 }
 
-void predict()
+void BayesianFilter::predict()
 {}
 
-void update(const Eigen::VectorXd &z, 
-                    const MeasurementPackage::SensorType sensorType)
+void BayesianFilter::update(const Eigen::VectorXd &z, 
+                    const SensorType sensorType)
 {}
 

@@ -36,13 +36,6 @@ public:
     void setProcessNoiseMatrix(const Eigen::MatrixXd processNoiseMatrix);
     
     /**
-     * Getter and Setter for Process noise matrix
-     */
-    Eigen::MatrixXd getProcessNoiseMatrix() const;
-    void setProcessNoiseMatrix(const Eigen::MatrixXd processNoiseMatrix);
-    
-
-    /**
      * Getter and Setter for Measurement noise matrix
      */
     Eigen::MatrixXd getMeasurementNoiseMatrix() const;

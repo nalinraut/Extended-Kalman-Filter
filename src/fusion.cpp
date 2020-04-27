@@ -145,6 +145,7 @@ void Fusion::processMeasurement(const MeasurementPackage &measurementPack)
         ekf->setMeasurementModelMatrix(tools.CalculateJacobian(ekf->getState()));
         ekf->setMeasurementNoiseMatrix (radarR);
         ekf->update(measurementPack.raw_measurements_, SensorType::RADAR);
+        std::cout<<"Measurement Matrix: "<<ekf->getMeasurementModelMatrix()<<std::endl;
     } 
     else 
     {
