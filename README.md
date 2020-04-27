@@ -94,6 +94,14 @@ The main program in under the `src` directory.
    * On windows, you may need to run: `cmake .. -G "Unix Makefiles" && make`
 4. Run it: `./ExtendedKF `
 
+## Steps to Run the project
+
+0. Make sure all the dependencies are installed
+1. Start the simulator
+2. Run `./ExtendedKalmanFilter` in `build` folder
+3. Select `EKF/UKF` in the simulator
+
+
 
 ## Rubric Criteria and what is satisfied
 | Criteria  | Comments |
