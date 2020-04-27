@@ -130,6 +130,6 @@ The main program in under the `src` directory.
 |  Multi- Threading |  Not Done |
 |  Promise and Future |  Not Done |
 |  Mutexs or lock | Not Done |
-|  Condition Variable | Done |
+|  Condition Variable | Not Done |
 
 
