@@ -1,6 +1,6 @@
-# Capstone Project
+# Extended Kalman Filter 
 The goal of this project is to build an Extended Kalman Filter using Modern C++ and
-use it to estimate the state of a moving object of interest with noisy LIDAR
+use it to estimate the state i.e. the position and velocity of a moving object of interest with noisy LIDAR
 and RADAR measurements. This is a previous udacity project which has been improvised by 
 refactoring the code to make use of proper inheritance and use of 
 smart pointers to enable for future implementation of any bayesian filter. 
@@ -13,13 +13,56 @@ Download the simulator for the OS you are using.
 The key metrics are [RMSE](https://en.wikipedia.org/wiki/Root-mean-square_deviation) values for both position and velocity of the tracked
 object.
 
+## LIDAR and RADAR measurements
+The lidar measurements are obtained in Cartesian coordinate system (px and py in the image below). Novelocity is obtained from lidar data. Unlike the lidar data, radar data is obtained 
+in polar coordinate system. The radar data consists of a directly measured range(i.e. the radial distamce from origin, rho), a bearing angle (i.e. the angle between range and x axis, phi) and range rate (i.e. radial velocity, rho dot).
+![Measurments](assets/lidar_radar.png "Measurements")
+
+## Kalman Filter and Extended Kalman Filter
+Kalman Filter, in summary, involves a continual loop of State Prediction and Measurement Update functions. In State Prediction step, the algorithm uses the information it has to predict the state (of bicycle around the car, in this case) until the next measurement arrives. In the Measurement Update, a new measurement (from the sensors Lidar/Radar) is used to adjust our belief of the state of the bicycle.
+While the Kalman Filter can handle linear motion and measurement, an Extended Kalman Filter can be used to handle nonlinear motion and measurement models. In case of a LIDAR measurement update, we will apply a Kalman Filter because the measurements from the sensor are Linear. But in case of a Radar measurement update, we need to apply Extended Kalman Filter because it includes angles that are nonlinear.
+A mathematical equation called Taylor Series (as shown in picture below) is used to get a Linear Approximation of the Non Linear Function.
+![Measurments](assets/taylor.png "Taylor Series")
+
+Since we are interested in linearizing, we just consider the first derivative of Taylor series. The first derivative is implemented thru a Jacobian matrix. The Jacobian for EKF looks like the following:
+![Jacobian](assets/jacobian.png "Jacobian Matrix")
+
+Which calculates to following:
+![Jacobian](assets/jacobian1.png "Jacobian Matrix")
+
+Equations for Kalman Filter and Extended Kalman Filter are as per the below image:
+![Kalman Filter](assets/jacobian1.png "Jacobian Matrix")
+
+Notations:
+X-State matrix
+F-State Transformation Matrix
+u-Control variable matrix
+P-Process Covariance Matrix (represents error in the estimate/process)
+K-Kalman Gain
+R-Sensor Noise Covariance Matrix (Measurement Error)
+I-Identity matrix
+z-Measurement of the state
+H-Measurement transition matrix
+x’ and P’ are Predicted state and Predicted Process Covariance matrix respectively.
+As seen from the image above, Kalman filter equations and extended Kalman filter equations are very similar. The main differences are:
+· The F matrix will be replaced by Fj when calculating P’.
+· The H matrix in the Kalman filter will be replaced by the Jacobian matrix Hj when calculating S, K, and P.
+· To calculate x′, the prediction update function, f, is used instead of the F matrix.
+· To calculate y, the h function is used instead of the H matrix.
+For this project, however, we do not need to use the f function or Fj. This is because we are using a linear model for the prediction step. So, for the prediction step, we can still use the regular Kalman filter equations and the F matrix rather than the extended Kalman filter equations.
+The equation y=z−Hx′ for the Kalman filter does not change to y=z−Hj​x for the extended Kalman filter. Instead, for extended Kalman filters, the equation will be y=z-h (x’); we’ll use the h function directly to convert our Cartesian space to polar space as per the image below:
+The angle phi (which is the second value in the h (x’) matrix) needed to be normalized in the y vector so that its angle is between –pi and pi.
+
+## Flow 
+The image below shows the flow of the implementation.
+![Flow](assets/flow.png "Implementation Flow")
+
 ## Installation
 This repository includes two files that can be used to set up and install [uWebSocketIO](https://github.com/uWebSockets/uWebSockets) for either Linux or Mac systems. For windows you can use either Docker, VMware, or even [Windows 10 Bash on Ubuntu](https://www.howtogeek.com/249966/how-to-install-and-use-the-linux-bash-shell-on-windows-10/) to install uWebSocketIO. Please see [this concept in the classroom](https://classroom.udacity.com/nanodegrees/nd013/parts/40f38239-66b6-46ec-ae68-03afd8a601c8/modules/0949fca6-b379-42af-a919-ee50aa304e6a/lessons/f758c44c-5e40-4e01-93b5-1a82aa4e044f/concepts/16cf4a78-4fc7-49e1-8621-3450ca938b77) for the required version and installation scripts.
+
 ## Results
-
 The success metrics for this project are the RMSE values for 2 datasets.
-
-The values shoule be below:
+The values should be below:
 - `0.11` for `P x` and `P y`.
 - `0.52` for `V x` and `V y`.
 
@@ -103,33 +146,6 @@ The main program in under the `src` directory.
 
 
 
-## Rubric Criteria and what is satisfied
-| Criteria  | Comments |
-|-----------|-----------|
-|  README   |  Done   |
-|  Project Title   |  Done   |
-|  Rubric List   |  Done   |
-|  Compile and Run   |  Done(Tested with Linux)   |
-|  C++ control structures and functions| Done |
-|  Reads data from file and processes the data| Done |
-|  User Input | Not Required |
-|  OOPs| Done |
-|  Class access specifiers | Done |
-|  Initialization List |  Done |
-|  Abstraction | Done |
-|  Encapsulation | Done |
-|  Inheritance | Done |
-|  Derived class override base class member functions | Done |
-|  Templates |  Not Required (Future scope) |
-|  References in function declaration |  Done |
-|  Destructors |  Done |
-|  RAII | Done |
-|  Rule of 5 | Not Required (No copy constructors) |
-|  Move semantics |  Not Required |
-|  Smart Pointers |  Done (Shared) |
-|  Multi- Threading |  Not Done |
-|  Promise and Future |  Not Done |
-|  Mutexs or lock | Not Done |
-|  Condition Variable | Not Done |
+
 
 
