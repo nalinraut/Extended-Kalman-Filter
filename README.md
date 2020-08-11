@@ -56,9 +56,13 @@ H-Measurement transition matrix
 x’ and P’ are Predicted state and Predicted Process Covariance matrix respectively.
 
 As seen from the image above, Kalman filter equations and extended Kalman filter equations are very similar. The main differences are:
+
 · The F matrix will be replaced by Fj when calculating P’.
+
 · The H matrix in the Kalman filter will be replaced by the Jacobian matrix Hj when calculating S, K, and P.
+
 · To calculate x′, the prediction update function, f, is used instead of the F matrix.
+
 · To calculate y, the h function is used instead of the H matrix.
 
 For this project, however, we do not need to use the f function or Fj. This is because we are using a linear model for the prediction step. So, for the prediction step, we can still use the regular Kalman filter equations and the F matrix rather than the extended Kalman filter equations.
