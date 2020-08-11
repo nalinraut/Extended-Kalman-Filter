@@ -22,33 +22,45 @@ in polar coordinate system. The radar data consists of a directly measured range
 Kalman Filter, in summary, involves a continual loop of State Prediction and Measurement Update functions. In State Prediction step, the algorithm uses the information it has to predict the state (of bicycle around the car, in this case) until the next measurement arrives. In the Measurement Update, a new measurement (from the sensors Lidar/Radar) is used to adjust our belief of the state of the bicycle.
 While the Kalman Filter can handle linear motion and measurement, an Extended Kalman Filter can be used to handle nonlinear motion and measurement models. In case of a LIDAR measurement update, we will apply a Kalman Filter because the measurements from the sensor are Linear. But in case of a Radar measurement update, we need to apply Extended Kalman Filter because it includes angles that are nonlinear.
 A mathematical equation called Taylor Series (as shown in picture below) is used to get a Linear Approximation of the Non Linear Function.
+
 ![Measurments](assets/taylor.png "Taylor Series")
 
 Since we are interested in linearizing, we just consider the first derivative of Taylor series. The first derivative is implemented thru a Jacobian matrix. The Jacobian for EKF looks like the following:
 ![Jacobian](assets/jacobian.png "Jacobian Matrix")
 
 Which calculates to following:
-![Jacobian](assets/jacobian1.png "Jacobian Matrix")
+![Jacobian](assets/jacobian1.jpeg "Jacobian Matrix")
 
 Equations for Kalman Filter and Extended Kalman Filter are as per the below image:
-![Kalman Filter](assets/jacobian1.png "Jacobian Matrix")
+![Kalman Filter](assets/kf_equations.jpeg "Jacobian Matrix")
 
 Notations:
 X-State matrix
+
 F-State Transformation Matrix
+
 u-Control variable matrix
+
 P-Process Covariance Matrix (represents error in the estimate/process)
+
 K-Kalman Gain
+
 R-Sensor Noise Covariance Matrix (Measurement Error)
+
 I-Identity matrix
+
 z-Measurement of the state
+
 H-Measurement transition matrix
+
 x’ and P’ are Predicted state and Predicted Process Covariance matrix respectively.
+
 As seen from the image above, Kalman filter equations and extended Kalman filter equations are very similar. The main differences are:
 · The F matrix will be replaced by Fj when calculating P’.
 · The H matrix in the Kalman filter will be replaced by the Jacobian matrix Hj when calculating S, K, and P.
 · To calculate x′, the prediction update function, f, is used instead of the F matrix.
 · To calculate y, the h function is used instead of the H matrix.
+
 For this project, however, we do not need to use the f function or Fj. This is because we are using a linear model for the prediction step. So, for the prediction step, we can still use the regular Kalman filter equations and the F matrix rather than the extended Kalman filter equations.
 The equation y=z−Hx′ for the Kalman filter does not change to y=z−Hj​x for the extended Kalman filter. Instead, for extended Kalman filters, the equation will be y=z-h (x’); we’ll use the h function directly to convert our Cartesian space to polar space as per the image below:
 The angle phi (which is the second value in the h (x’) matrix) needed to be normalized in the y vector so that its angle is between –pi and pi.
